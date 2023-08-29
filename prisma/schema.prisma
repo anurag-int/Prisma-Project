@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// model nameofmodel{}
+// model is a keyword in prisma schema file and it is used to create a model in the database.
+// model name should be in PascalCase and it should be singular and not plural.
+// id is a field in the model and it is of type Int and it is a primary key and it is autoincremented
+// @id is a directive in prisma schema file and it is used to make a field as primary key
+// @default(autoincrement()) is a directive in prisma schema file and it is used to autoincrement the id field
+// @default(autoincrement()) is used only for Int type fields.
+// so whenever we create a new model a new id will be generated/created automatically
+
+// @unique is a directive in prisma schema file and it is used to make a field as unique
+
+model Product {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  price      Int       @default(999)
+  createdAt  DateTime  @default(now())
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
+}
